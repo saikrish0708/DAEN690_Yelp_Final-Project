@@ -5,41 +5,23 @@ Created on Tue Nov 14 14:38:02 2017
 @author: datalab
 """
 
-
-
-
 # FINAL CODE
-
+#Importing Packages
 import pandas as pd
 import numpy as np
-#from textblob import TextBlob
 
+#importing the dataset 
 reviews=pd.read_csv("S:/DAEN-690 Project data-Krish/inTrain.csv", encoding="latin1")
-#newdata=[]
-
-#d = []
-#for p in game.players.passing():
-    #d.append({'Player': p, 'Team': p.team, 'Passer Rating':
-     #   p.passer_rating()})
-
-#pd.DataFrame(d)
 
 #text="My girlfriend and I stayed here for 3 nights and loved it. The location of this hotel and very decent price makes this an amazing deal. When you walk out the front door Scott Monument and Princes street are right in front of you, Edinburgh Castle and the Royal Mile is a 2 minute walk via a close right around the corner, and there are so many hidden gems nearby including Calton Hill and the newly opened Arches that made this location incredible."
 #vs = analyzer.polarity_scores(text)
 #vs['compound'] 
 
-
-
-
-
-
-
-    
-
-    
+#Importing VADER package
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
     analyzer = SentimentIntensityAnalyzer()
 
+#Creating a new list 'd'    
 d=[]
 
 count=0
@@ -48,21 +30,13 @@ while(count< n):
     sentence=reviews['text'][count]
     
     vs = analyzer.polarity_scores(sentence)
-  #  if vs['compound'] >0.5:
-  #      print("positive")
-  #  elif ((vs['compound'] >-0.5) and (vs['compound'] <0.5)):
- #       print("neutral")
- #   elif vs['compound'] < -0.5:
-  #      print("negative")
     d.append({'Business ID':reviews['business_id'][count], 'Vader Score' : vs['compound'], 'Original Star rating': reviews['stars'][count]})    
     count+=1
 d    
 type(d)
 df=pd.DataFrame(d)
 df
-#new_df=df.groupby('Business ID')['Vader Score', 'Original Star rating'].agg(['mean'])
-#new_df.to_csv('FinalProject_690.csv', encoding='utf-8', index=True)
-
+#grouping by business ID
 new=(df.groupby('Business ID')
    .....:    .agg({'Vader Score':'mean', 'Original Star rating':'mean'})
    .....:    .reset_index()
@@ -70,13 +44,7 @@ new=(df.groupby('Business ID')
 new.to_csv('FinalProject_690_2.csv', encoding='utf-8', index=True)
 vader_stars=[]
 
-
-
-
-
-
-
-
+#Creating star rating for Vader Scores
 for row in new['Vader Score']:
     if row>0.9:
         vader_stars.append(5)
